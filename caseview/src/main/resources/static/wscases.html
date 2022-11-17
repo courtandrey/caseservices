@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Random Cases</title>
+    <script>
+        var socket = new WebSocket('ws://' + window.location.host + '/ws');
+
+        socket.onopen = function () {
+            console.log('WebSocket connection is open');
+        };
+
+        socket.onmessage = function (message) {
+            var text = "";
+            var arrAC = message.data.split("Decision");
+            var ac = "";
+
+            for (i = 1; i < arrAC.length; i++) {
+                ac = (arrAC[i].endsWith(", "))
+                    ? arrAC[i].substring(0, arrAC[i].length - 2)
+                    : arrAC[i]
+
+                text += "Decision" + ac + "\n\n";
+            }
+
+            document.getElementById("cases").innerText = text;
+        };
+
+        socket.onclose = function () {
+            console.log('WebSocket connection closed');
+        };
+    </script>
+</head>
+<body>
+<h1>Random Criminal Cases</h1>
+<div style="border-style: solid; border-width: 2px; margin-top: 15px;
+        margin-bottom: 15px; margin-left: 15px; margin-right: 15px;">
+    <label id="cases"></label>
+</div>
+</body>
+</html>
